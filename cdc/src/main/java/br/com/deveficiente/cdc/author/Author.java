@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +30,11 @@ public class Author {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Author(String name, String email, String description) {
+    public Author(@NotBlank String name, @NotBlank String email, @NotBlank String description) {
+        Assert.hasText(name, "Name cannot be empty");
+        Assert.hasText(email, "Email cannot be empty");
+        Assert.hasText(description, "Description cannot be empty");
+
         this.name = name;
         this.email = email;
         this.description = description;
