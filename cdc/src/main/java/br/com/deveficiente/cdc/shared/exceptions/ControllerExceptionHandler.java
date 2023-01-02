@@ -1,4 +1,4 @@
-package br.com.deveficiente.cdc.exceptions.shared;
+package br.com.deveficiente.cdc.shared.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;

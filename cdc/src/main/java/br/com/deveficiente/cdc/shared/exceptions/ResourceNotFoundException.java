@@ -1,4 +1,4 @@
-package br.com.deveficiente.cdc.exceptions.shared;
+package br.com.deveficiente.cdc.shared.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
     public ResourceNotFoundException(String message) {
