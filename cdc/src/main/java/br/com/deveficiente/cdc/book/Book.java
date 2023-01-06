@@ -119,4 +119,8 @@ public class Book {
     public String getAuthorName() {
         return author.getName();
     }
+
+    public String getAuthorDescription() {
+        return this.author.getDescription();
+    }
 }
