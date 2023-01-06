@@ -83,4 +83,40 @@ public class Book {
         this.category = category;
         this.author = author;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Integer getPagesNumber() {
+        return pagesNumber;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+
+    public Long getCategoryId() {
+        return category.getId();
+    }
+
+    public String getAuthorName() {
+        return author.getName();
+    }
 }

@@ -26,4 +26,8 @@ public class Category {
         Assert.hasText(name, "Category name cannot be null");
         this.name = name;
     }
+
+    public Long getId() {
+        return this.id;
+    }
 }

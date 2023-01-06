@@ -43,4 +43,8 @@ public class Author {
 
     @Deprecated // hibernate only
     public Author() {}
+
+    public String getName() {
+        return name;
+    }
 }
