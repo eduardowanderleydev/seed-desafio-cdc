@@ -1,6 +1,8 @@
 package br.com.deveficiente.cdc.purchase;
 
+import br.com.deveficiente.cdc.country.Country;
 import br.com.deveficiente.cdc.shared.validation.Document;
+import br.com.deveficiente.cdc.shared.validation.ExistsEntityById;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +15,6 @@ public record NewPurchaseForm(@NotBlank @Email String email,
                               @NotBlank String addressComplement,
                               @NotBlank String city,
                               @NotBlank String cep,
-                              @NotNull Long countryId,
+                              @ExistsEntityById(domainClass = Country.class) @NotNull Long countryId,
                               @NotNull Long stateId,
                               @NotBlank String phone) {}
