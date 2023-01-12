@@ -3,9 +3,15 @@ package br.com.deveficiente.cdc.purchase;
 import br.com.deveficiente.cdc.country.Country;
 import br.com.deveficiente.cdc.shared.validation.Document;
 import br.com.deveficiente.cdc.shared.validation.ExistsEntityById;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import br.com.deveficiente.cdc.state.State;
+import jakarta.persistence.EntityManager;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 public record NewPurchaseForm(@NotBlank @Email String email,
                               @NotBlank String name,
@@ -16,5 +22,22 @@ public record NewPurchaseForm(@NotBlank @Email String email,
                               @NotBlank String city,
                               @NotBlank String cep,
                               @ExistsEntityById(domainClass = Country.class) @NotNull Long countryId,
-                              @NotNull Long stateId,
-                              @NotBlank String phone) {}
+                              @ExistsEntityById(domainClass = State.class) Long stateId,
+                              @NotBlank String phone,
+                              @NotNull @Positive BigDecimal amount,
+                              @NotEmpty List<@Valid NewPurchaseItemForm> items) {
+
+    public Purchase toModel(EntityManager entityManager) {
+        Country country = entityManager.find(Country.class, countryId);
+        Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, amount);
+        if (nonNull(stateId)) {
+            State state = entityManager.find(State.class, stateId);
+            purchase.setState(state);
+        }
+        return purchase;
+    }
+
+    public boolean hasState() {
+        return nonNull(stateId);
+    }
+}

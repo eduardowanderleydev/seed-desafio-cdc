@@ -22,6 +22,8 @@ public class ExistsEntityByIdValidator implements ConstraintValidator<ExistsEnti
 
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
+        if (o == null) return true;
+
         List result = entityManager
                 .createQuery("select 1 from %s where id =:value".formatted(this.domainClass.getName()))
                 .setParameter("value", o)

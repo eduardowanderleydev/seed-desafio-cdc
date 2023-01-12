@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URISyntaxException;
+
 @RestController
 public class PurchaseController {
 
@@ -23,7 +25,8 @@ public class PurchaseController {
     }
 
     @PostMapping("/purchase/new")
-    public ResponseEntity newPurchase(@RequestBody @Valid NewPurchaseForm form) {
+    public ResponseEntity newPurchase(@RequestBody @Valid NewPurchaseForm form) throws URISyntaxException {
+
         return ResponseEntity.ok(form);
     }
 
