@@ -29,6 +29,6 @@ public class ExistsEntityByIdValidator implements ConstraintValidator<ExistsEnti
 
         Assert.state(result.size() <= 1, "More than one %s was found with the same id".formatted(this.domainClass.getName()));
 
-        return result.isEmpty();
+        return !result.isEmpty();
     }
 }
