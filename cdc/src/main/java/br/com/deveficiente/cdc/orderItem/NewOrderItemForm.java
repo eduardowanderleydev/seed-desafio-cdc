@@ -1,4 +1,4 @@
-package br.com.deveficiente.cdc.purchase;
+package br.com.deveficiente.cdc.orderItem;
 
 import br.com.deveficiente.cdc.book.Book;
 import br.com.deveficiente.cdc.orderItem.OrderItem;

@@ -1,6 +1,8 @@
 package br.com.deveficiente.cdc.purchase;
 
 import br.com.deveficiente.cdc.country.Country;
+import br.com.deveficiente.cdc.coupon.Coupon;
+import br.com.deveficiente.cdc.order.NewOrderForm;
 import br.com.deveficiente.cdc.order.Order;
 import br.com.deveficiente.cdc.shared.validation.Document;
 import br.com.deveficiente.cdc.shared.validation.ExistsEntityById;
@@ -10,7 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.util.Assert;
 
 import java.util.function.Function;
 
@@ -32,6 +33,7 @@ public class NewPurchaseForm {
     private Long stateId;
     private @NotBlank String phone;
     private @Valid NewOrderForm orderForm;
+    private String coupon;
 
     public NewPurchaseForm(@NotBlank @Email String email,
                            @NotBlank String name,
@@ -65,6 +67,9 @@ public class NewPurchaseForm {
         Function<Purchase, Order> createOrderFunction = orderForm.toModel(entityManager);
 
         Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, createOrderFunction);
+
+        Coupon coupon = entityManager.find(Coupon.class, this.coupon);
+        purchase.setCoupon(coupon);
 
         if (nonNull(stateId)) {
             State state = entityManager.find(State.class, stateId);

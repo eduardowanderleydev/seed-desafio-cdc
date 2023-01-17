@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.time.LocalDate.now;
 
 @Entity
 public class Coupon {
@@ -44,5 +45,13 @@ public class Coupon {
         this.code = code;
         this.discountPercentual = discountPercentual;
         this.expirationDate = expirationDate;
+    }
+
+    public boolean isValid() {
+        return this.expirationDate.isAfter(now());
+    }
+
+    public Integer getDiscountPercentual() {
+        return discountPercentual;
     }
 }

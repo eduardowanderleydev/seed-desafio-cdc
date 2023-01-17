@@ -49,8 +49,13 @@ public class Order {
     public Order() {}
 
     public boolean hasValidAmount() {
-        return orderItems.stream().map(OrderItem::getItemPrice)
-                .reduce(ZERO, BigDecimal::add).setScale(2, HALF_EVEN)
-                .equals(amount.setScale(2, HALF_EVEN));
+        BigDecimal amount = orderItems.stream().map(OrderItem::getItemPrice).reduce(ZERO, BigDecimal::add);
+
+        if (purchase.hasDiscountCoupon()) {
+            amount = amount.min((amount.multiply(purchase.getDiscountInPercentage())));
+        }
+
+        return amount.setScale(2, HALF_EVEN)
+                .equals(this.amount.setScale(2, HALF_EVEN));
     }
 }

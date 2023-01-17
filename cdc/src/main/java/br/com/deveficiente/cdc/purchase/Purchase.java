@@ -1,6 +1,7 @@
 package br.com.deveficiente.cdc.purchase;
 
 import br.com.deveficiente.cdc.country.Country;
+import br.com.deveficiente.cdc.coupon.Coupon;
 import br.com.deveficiente.cdc.order.Order;
 import br.com.deveficiente.cdc.shared.validation.Document;
 import br.com.deveficiente.cdc.state.State;
@@ -9,10 +10,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.function.Function;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.math.BigDecimal.ZERO;
 
 @Entity
 public class Purchase {
@@ -39,6 +42,9 @@ public class Purchase {
 
     @OneToOne(mappedBy = "purchase", cascade = PERSIST)
     private Order purchaseOrder;
+
+    @ManyToOne
+    private Coupon coupon;
 
     public Purchase(@NotBlank @Email String email, @NotBlank String name, @NotBlank String lastName, @NotBlank @Document String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotBlank String cep, Country country, @NotBlank String phone, Function<Purchase, Order> createOrderFunction) {
         Assert.hasText(email, "Email cannot be empty");
@@ -74,8 +80,20 @@ public class Purchase {
         this.state = state;
     }
 
-    public void setPurchaseOrder(Order purchaseOrder) {
-        Assert.notNull(state, "Order cannot be null");
-        this.purchaseOrder = purchaseOrder;
+    public void setCoupon(Coupon coupon) {
+        Assert.isTrue(this.coupon == null, "This purchase is already registered with a coupom");
+        Assert.isTrue(coupon.isValid(), "This coupom is not valid");
+        Assert.notNull(coupon, "Coupon cannot be null");
+
+        this.coupon = coupon;
+    }
+
+    public boolean hasDiscountCoupon() {
+        return this.coupon != null;
+    }
+
+    public BigDecimal getDiscountInPercentage() {
+        if (!hasDiscountCoupon()) return ZERO;
+        return new BigDecimal(this.coupon.getDiscountPercentual() / 100);
     }
 }
