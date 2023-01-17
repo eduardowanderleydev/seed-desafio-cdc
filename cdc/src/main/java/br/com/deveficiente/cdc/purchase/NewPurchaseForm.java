@@ -5,7 +5,7 @@ import br.com.deveficiente.cdc.coupon.Coupon;
 import br.com.deveficiente.cdc.order.NewOrderForm;
 import br.com.deveficiente.cdc.order.Order;
 import br.com.deveficiente.cdc.shared.validation.Document;
-import br.com.deveficiente.cdc.shared.validation.ExistsEntityById;
+import br.com.deveficiente.cdc.shared.validation.ExistsEntityByField;
 import br.com.deveficiente.cdc.state.State;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
@@ -27,9 +27,9 @@ public class NewPurchaseForm {
     private @NotBlank String addressComplement;
     private @NotBlank String city;
     private @NotBlank String cep;
-    @ExistsEntityById(domainClass = Country.class)
+    @ExistsEntityByField(domainClass = Country.class, field = "id")
     private @NotNull Long countryId;
-    @ExistsEntityById(domainClass = State.class)
+    @ExistsEntityByField(domainClass = State.class, field = "id")
     private Long stateId;
     private @NotBlank String phone;
     private @Valid NewOrderForm orderForm;

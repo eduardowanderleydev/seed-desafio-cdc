@@ -8,16 +8,18 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-public class ExistsEntityByIdValidator implements ConstraintValidator<ExistsEntityById, Object> {
+public class ExistsEntityByFieldValidator implements ConstraintValidator<ExistsEntityByField, Object> {
 
     private Class<?> domainClass;
+    private String fieldName;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public void initialize(ExistsEntityById constraintAnnotation) {
+    public void initialize(ExistsEntityByField constraintAnnotation) {
         this.domainClass = constraintAnnotation.domainClass();
+        this.fieldName = constraintAnnotation.field();
     }
 
     @Override
@@ -25,7 +27,7 @@ public class ExistsEntityByIdValidator implements ConstraintValidator<ExistsEnti
         if (o == null) return true;
 
         List result = entityManager
-                .createQuery("select 1 from %s where id =:value".formatted(this.domainClass.getName()))
+                .createQuery("select 1 from %s where %s =:value".formatted(this.domainClass.getName(), this.fieldName))
                 .setParameter("value", o)
                 .getResultList();
 

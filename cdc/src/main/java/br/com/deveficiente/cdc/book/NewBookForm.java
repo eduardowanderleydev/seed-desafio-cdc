@@ -2,7 +2,7 @@ package br.com.deveficiente.cdc.book;
 
 import br.com.deveficiente.cdc.author.Author;
 import br.com.deveficiente.cdc.category.Category;
-import br.com.deveficiente.cdc.shared.validation.ExistsEntityById;
+import br.com.deveficiente.cdc.shared.validation.ExistsEntityByField;
 import br.com.deveficiente.cdc.shared.validation.UniqueValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EntityManager;
@@ -22,8 +22,8 @@ public record NewBookForm(@NotBlank @UniqueValue(domainClass = Book.class, field
                           @NotNull @Min(100) Integer pagesNumber,
                           @NotBlank @UniqueValue(domainClass = Book.class, fieldName = "isbn") String isbn,
                           @NotNull @JsonFormat(pattern = "dd/MM/yyy", shape = STRING) @Future LocalDate publishDate,
-                          @ExistsEntityById(domainClass = Category.class) @NotNull Long categoryId,
-                          @ExistsEntityById(domainClass = Author.class) @NotNull Long authorId) {
+                          @ExistsEntityByField(domainClass = Category.class, field = "id") @NotNull Long categoryId,
+                          @ExistsEntityByField(domainClass = Author.class, field = "id") @NotNull Long authorId) {
 
     public Book toModel(EntityManager entityManager) {
         Category category = entityManager.find(Category.class, categoryId);

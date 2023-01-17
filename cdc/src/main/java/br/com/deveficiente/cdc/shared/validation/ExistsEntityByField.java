@@ -13,8 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {ExistsEntityByIdValidator.class})
-public @interface ExistsEntityById {
+@Constraint(validatedBy = {ExistsEntityByFieldValidator.class})
+public @interface ExistsEntityByField {
     String message() default "{entity.does.not.exist}";
 
     Class<?>[] groups() default {};
@@ -22,4 +22,6 @@ public @interface ExistsEntityById {
     Class<? extends Payload>[] payload() default {};
 
     Class<?> domainClass();
+
+    String fieldName();
 }
