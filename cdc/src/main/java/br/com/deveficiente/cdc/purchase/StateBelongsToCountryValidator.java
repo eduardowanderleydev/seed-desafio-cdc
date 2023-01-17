@@ -26,8 +26,8 @@ public class StateBelongsToCountryValidator implements Validator {
         NewPurchaseForm form = (NewPurchaseForm) target;
 
         if (form.hasState()) {
-            Country country = entityManager.find(Country.class, form.countryId());
-            State state = entityManager.find(State.class, form.stateId());
+            Country country = entityManager.find(Country.class, form.getCountryId());
+            State state = entityManager.find(State.class, form.getStateId());
 
             if (!state.belongsTo(country)) {
                 errors.rejectValue("stateId", null, "State doesnt belong to country");
