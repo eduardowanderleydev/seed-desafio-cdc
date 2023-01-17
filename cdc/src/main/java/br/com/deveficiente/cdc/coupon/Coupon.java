@@ -2,7 +2,6 @@ package br.com.deveficiente.cdc.coupon;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -11,18 +10,12 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static java.time.LocalDate.now;
 
 @Entity
 public class Coupon {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-
-    @NotNull
-    @Column(unique = true, nullable = false)
     private String code;
 
     @Positive

@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.util.Assert;
 
 import java.util.function.Function;
 
@@ -33,7 +34,7 @@ public class NewPurchaseForm {
     private Long stateId;
     private @NotBlank String phone;
     private @Valid NewOrderForm orderForm;
-    private String coupon;
+    private @ExistsEntityByField(domainClass = Coupon.class, field = "code") String coupon;
 
     public NewPurchaseForm(@NotBlank @Email String email,
                            @NotBlank String name,
@@ -46,7 +47,7 @@ public class NewPurchaseForm {
                            @NotNull Long countryId,
                            Long stateId,
                            @NotBlank String phone,
-                           @Valid NewOrderForm orderForm) {
+                           @Valid NewOrderForm orderForm, String coupon) {
         this.email = email;
         this.name = name;
         this.lastName = lastName;
@@ -59,6 +60,7 @@ public class NewPurchaseForm {
         this.stateId = stateId;
         this.phone = phone;
         this.orderForm = orderForm;
+        this.coupon = coupon;
     }
 
     public Purchase toModel(EntityManager entityManager) {
@@ -66,10 +68,13 @@ public class NewPurchaseForm {
 
         Function<Purchase, Order> createOrderFunction = orderForm.toModel(entityManager);
 
-        Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, createOrderFunction);
+        Coupon coupon = null;
+        if (this.coupon != null) {
+            coupon = entityManager.find(Coupon.class, this.coupon);
+        }
+        Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, coupon, createOrderFunction);
 
-        Coupon coupon = entityManager.find(Coupon.class, this.coupon);
-        purchase.setCoupon(coupon);
+        Assert.isTrue(purchase.hasValidAmount(), "[BUG] invalid amount");
 
         if (nonNull(stateId)) {
             State state = entityManager.find(State.class, stateId);
@@ -83,36 +88,8 @@ public class NewPurchaseForm {
         return nonNull(stateId);
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getDocument() {
-        return document;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getAddressComplement() {
-        return addressComplement;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getCep() {
-        return cep;
     }
 
     public Long getCountryId() {
@@ -121,13 +98,5 @@ public class NewPurchaseForm {
 
     public Long getStateId() {
         return stateId;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public NewOrderForm getOrderForm() {
-        return orderForm;
     }
 }

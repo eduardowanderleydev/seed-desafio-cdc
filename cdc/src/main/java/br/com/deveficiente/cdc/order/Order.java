@@ -41,8 +41,6 @@ public class Order {
         this.amount = amount;
         this.orderItems = orderItems;
         this.purchase = purchase;
-
-        Assert.isTrue(hasValidAmount(), "[BUG] invalid amount");
     }
 
     @Deprecated
@@ -52,7 +50,7 @@ public class Order {
         BigDecimal amount = orderItems.stream().map(OrderItem::getItemPrice).reduce(ZERO, BigDecimal::add);
 
         if (purchase.hasDiscountCoupon()) {
-            amount = amount.min((amount.multiply(purchase.getDiscountInPercentage())));
+            amount = amount.subtract((amount.multiply(purchase.getDiscountInPercentage())));
         }
 
         return amount.setScale(2, HALF_EVEN)

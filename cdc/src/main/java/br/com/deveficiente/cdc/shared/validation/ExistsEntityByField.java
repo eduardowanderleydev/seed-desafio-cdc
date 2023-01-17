@@ -23,5 +23,5 @@ public @interface ExistsEntityByField {
 
     Class<?> domainClass();
 
-    String fieldName();
+    String field();
 }
