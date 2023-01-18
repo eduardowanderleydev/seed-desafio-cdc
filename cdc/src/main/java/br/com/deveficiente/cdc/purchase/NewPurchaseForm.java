@@ -80,7 +80,7 @@ public class NewPurchaseForm {
         return purchase;
     }
 
-    private boolean hasCoupon() {
+    public boolean hasCoupon() {
         return StringUtils.hasText(coupon);
     }
 
@@ -98,5 +98,9 @@ public class NewPurchaseForm {
 
     public Long getStateId() {
         return stateId;
+    }
+
+    public String getCoupon() {
+        return coupon;
     }
 }

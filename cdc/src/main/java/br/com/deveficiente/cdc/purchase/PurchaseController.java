@@ -18,14 +18,16 @@ public class PurchaseController {
     private EntityManager entityManager;
 
     private final StateBelongsToCountryValidator stateBelongsToCountryValidator;
+    private final ValidCouponValidator validCouponValidator;
 
-    public PurchaseController(StateBelongsToCountryValidator stateBelongsToCountryValidator) {
+    public PurchaseController(StateBelongsToCountryValidator stateBelongsToCountryValidator, ValidCouponValidator validCouponValidator) {
         this.stateBelongsToCountryValidator = stateBelongsToCountryValidator;
+        this.validCouponValidator = validCouponValidator;
     }
 
     @InitBinder
     public void addValidators(WebDataBinder binder) {
-        binder.addValidators(stateBelongsToCountryValidator);
+        binder.addValidators(stateBelongsToCountryValidator, validCouponValidator);
     }
 
     @PostMapping("/purchase/new")
