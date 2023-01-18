@@ -33,10 +33,6 @@ public class AppliedCoupon {
     @Deprecated
     public AppliedCoupon() {}
 
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
     public Integer getCouponDiscountPercentual() {
         return couponDiscountPercentual;
     }

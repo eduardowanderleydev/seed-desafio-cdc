@@ -113,10 +113,6 @@ public class Book {
         return publishDate;
     }
 
-    public Long getCategoryId() {
-        return category.getId();
-    }
-
     public String getAuthorName() {
         return author.getName();
     }
