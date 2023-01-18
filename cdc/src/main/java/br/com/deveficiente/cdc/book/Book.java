@@ -51,6 +51,7 @@ public class Book {
     @NotNull
     private Author author;
 
+    /** Hibernate only */
     @Deprecated
     public Book() {}
 

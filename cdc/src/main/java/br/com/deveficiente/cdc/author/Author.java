@@ -41,7 +41,8 @@ public class Author {
         createdAt = now();
     }
 
-    @Deprecated // hibernate only
+    /** Hibernate only */
+    @Deprecated
     public Author() {}
 
     public String getName() {

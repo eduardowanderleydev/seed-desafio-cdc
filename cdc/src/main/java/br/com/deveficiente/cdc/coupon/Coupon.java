@@ -26,6 +26,7 @@ public class Coupon {
     @Future
     private LocalDate expirationDate;
 
+    /** Hibernate only */
     @Deprecated
     public Coupon() {}
 

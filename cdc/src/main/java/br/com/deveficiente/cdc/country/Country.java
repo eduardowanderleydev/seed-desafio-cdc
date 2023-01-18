@@ -21,6 +21,8 @@ public class Country {
     @Column(unique = true, nullable = false)
     private String name;
 
+    /** Hibernate only */
+    @Deprecated
     public Country() {}
 
     public Country(@NotNull String name) {

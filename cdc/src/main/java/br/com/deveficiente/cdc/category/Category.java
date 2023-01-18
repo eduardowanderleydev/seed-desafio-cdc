@@ -20,6 +20,8 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    /** Hibernate only */
+    @Deprecated
     public Category() {}
 
     public Category(String name) {

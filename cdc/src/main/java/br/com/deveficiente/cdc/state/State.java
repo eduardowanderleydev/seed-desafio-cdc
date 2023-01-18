@@ -23,6 +23,8 @@ public class State {
     @ManyToOne
     private Country country;
 
+    /** Hibernate only */
+    @Deprecated
     public State() {}
 
     public State(@NotBlank String name, @NotNull Country country) {

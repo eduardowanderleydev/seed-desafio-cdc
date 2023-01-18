@@ -1,6 +1,7 @@
 package br.com.deveficiente.cdc.purchase;
 
 import br.com.deveficiente.cdc.country.Country;
+import br.com.deveficiente.cdc.coupon.AppliedCoupon;
 import br.com.deveficiente.cdc.coupon.Coupon;
 import br.com.deveficiente.cdc.order.Order;
 import br.com.deveficiente.cdc.shared.validation.Document;

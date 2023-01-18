@@ -43,6 +43,7 @@ public class Order {
         this.purchase = purchase;
     }
 
+    /** Hibernate only */
     @Deprecated
     public Order() {}
 

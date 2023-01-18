@@ -39,6 +39,7 @@ public class OrderItem {
         this.priceAtMoment = book.getPrice();
     }
 
+    /** Hibernate only */
     @Deprecated
     public OrderItem() {}
 

@@ -1,6 +1,5 @@
-package br.com.deveficiente.cdc.purchase;
+package br.com.deveficiente.cdc.coupon;
 
-import br.com.deveficiente.cdc.coupon.Coupon;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Future;
@@ -30,6 +29,8 @@ public class AppliedCoupon {
         this.expirationDate = coupon.getExpirationDate();
     }
 
+    /** Hibernate only */
+    @Deprecated
     public AppliedCoupon() {}
 
     public LocalDate getExpirationDate() {
