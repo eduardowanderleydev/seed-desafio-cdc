@@ -5,7 +5,6 @@ import br.com.deveficiente.cdc.coupon.Coupon;
 import br.com.deveficiente.cdc.order.Order;
 import br.com.deveficiente.cdc.shared.validation.Document;
 import br.com.deveficiente.cdc.state.State;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +16,7 @@ import java.util.function.Function;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static java.math.BigDecimal.ZERO;
+import static java.util.Objects.nonNull;
 
 @Entity
 public class Purchase {
@@ -44,10 +44,10 @@ public class Purchase {
     @OneToOne(mappedBy = "purchase", cascade = PERSIST)
     private Order purchaseOrder;
 
-    @ManyToOne
-    private Coupon coupon;
+    @Embedded
+    private AppliedCoupon appliedCoupon;
 
-    public Purchase(@NotBlank @Email String email, @NotBlank String name, @NotBlank String lastName, @NotBlank @Document String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotBlank String cep, Country country, @NotBlank String phone, @Nullable Coupon coupon, Function<Purchase, Order> createOrderFunction) {
+    public Purchase(@NotBlank @Email String email, @NotBlank String name, @NotBlank String lastName, @NotBlank @Document String document, @NotBlank String address, @NotBlank String addressComplement, @NotBlank String city, @NotBlank String cep, Country country, @NotBlank String phone, Coupon coupon, Function<Purchase, Order> createOrderFunction) {
         Assert.hasText(email, "Email cannot be empty");
         Assert.hasText(name, "Name cannot be empty");
         Assert.hasText(lastName, "Last name cannot be empty");
@@ -59,8 +59,7 @@ public class Purchase {
         Assert.notNull(country, "Country cannot be null");
         Assert.hasText(phone, "Phone name cannot be empty");
 
-        if (coupon != null)  Assert.isTrue(coupon.isValid(), "This coupom is not valid");
-
+        if (nonNull(coupon)) applyCoupon(coupon);
         this.email = email;
         this.name = name;
         this.lastName = lastName;
@@ -71,7 +70,6 @@ public class Purchase {
         this.cep = cep;
         this.country = country;
         this.phone = phone;
-        this.coupon = coupon;
         this.purchaseOrder = createOrderFunction.apply(this);
     }
 
@@ -85,15 +83,18 @@ public class Purchase {
     }
 
     public boolean hasDiscountCoupon() {
-        return this.coupon != null;
+        return this.appliedCoupon != null;
     }
 
     public BigDecimal getDiscountInPercentage() {
         if (!hasDiscountCoupon()) return ZERO;
-        return BigDecimal.valueOf((double) this.coupon.getDiscountPercentual() / 100);
+        return BigDecimal.valueOf((double) this.appliedCoupon.getCouponDiscountPercentual() / 100);
     }
 
-    public boolean hasValidAmount() {
-        return this.purchaseOrder.hasValidAmount();
+    public void applyCoupon(Coupon coupon) {
+        Assert.notNull(coupon, "Coupon cannot be null");
+        Assert.isTrue(coupon.isValid(), "Coupon not valid");
+        Assert.isNull(appliedCoupon, "[BUG] Cannot change a coupon");
+        this.appliedCoupon = new AppliedCoupon(coupon);
     }
 }

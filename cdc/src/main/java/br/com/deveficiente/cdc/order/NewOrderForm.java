@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,10 @@ public record NewOrderForm(@NotNull @Positive BigDecimal amount,
                            @NotEmpty List<@Valid NewOrderItemForm> items) {
     public Function<Purchase, Order> toModel(EntityManager entityManager) {
         List<OrderItem> orderItems = items.stream().map(itemForm -> itemForm.toModel(entityManager)).toList();
-        return (purchase) -> new Order(orderItems, purchase, amount);
+        return (purchase) -> {
+            Order order = new Order(orderItems, purchase, amount);
+            Assert.isTrue(order.hasValidAmount(), "[BUG] invalid amount");
+            return order;
+        };
     }
 }

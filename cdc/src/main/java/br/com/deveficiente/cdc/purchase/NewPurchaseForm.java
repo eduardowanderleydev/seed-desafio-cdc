@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.function.Function;
 
@@ -68,13 +68,9 @@ public class NewPurchaseForm {
 
         Function<Purchase, Order> createOrderFunction = orderForm.toModel(entityManager);
 
-        Coupon coupon = null;
-        if (this.coupon != null) {
-            coupon = entityManager.find(Coupon.class, this.coupon);
-        }
-        Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, coupon, createOrderFunction);
+        Coupon purchaseCoupon = hasCoupon() ? entityManager.find(Coupon.class, this.coupon) : null;
 
-        Assert.isTrue(purchase.hasValidAmount(), "[BUG] invalid amount");
+        Purchase purchase = new Purchase(email, name, lastName, document, address, addressComplement, city, cep, country, phone, purchaseCoupon, createOrderFunction);
 
         if (nonNull(stateId)) {
             State state = entityManager.find(State.class, stateId);
@@ -82,6 +78,10 @@ public class NewPurchaseForm {
         }
 
         return purchase;
+    }
+
+    private boolean hasCoupon() {
+        return StringUtils.hasText(coupon);
     }
 
     public boolean hasState() {

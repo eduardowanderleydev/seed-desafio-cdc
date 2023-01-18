@@ -47,4 +47,8 @@ public class Coupon {
     public Integer getDiscountPercentual() {
         return discountPercentual;
     }
+
+    public LocalDate getExpirationDate() {
+        return this.expirationDate;
+    }
 }
