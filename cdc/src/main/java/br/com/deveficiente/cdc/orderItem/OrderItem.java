@@ -46,4 +46,16 @@ public class OrderItem {
     public BigDecimal getItemPrice() {
         return priceAtMoment.multiply(new BigDecimal(quantity));
     }
+
+    public String getBookName() {
+        return this.book.getTitle();
+    }
+
+    public BigDecimal getPriceAtMoment() {
+        return priceAtMoment;
+    }
+
+    public Integer getQuantity() {
+        return this.quantity;
+    }
 }

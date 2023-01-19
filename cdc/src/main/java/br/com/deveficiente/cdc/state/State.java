@@ -37,4 +37,8 @@ public class State {
     public boolean belongsTo(Country country) {
         return this.country.equals(country);
     }
+
+    public String getName() {
+        return this.name;
+    }
 }

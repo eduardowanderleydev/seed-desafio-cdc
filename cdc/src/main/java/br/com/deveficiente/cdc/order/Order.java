@@ -48,13 +48,35 @@ public class Order {
     public Order() {}
 
     public boolean hasValidAmount() {
-        BigDecimal amount = orderItems.stream().map(OrderItem::getItemPrice).reduce(ZERO, BigDecimal::add);
+        BigDecimal amount = getOrderAmountWithoutCouponDiscount();
 
-        if (purchase.hasDiscountCoupon()) {
+        if (hasDiscountCoupon()) {
             amount = amount.subtract((amount.multiply(purchase.getDiscountInPercentage())));
         }
 
         return amount.setScale(2, HALF_EVEN)
                 .equals(this.amount.setScale(2, HALF_EVEN));
+    }
+
+    public boolean hasDiscountCoupon() {
+        return purchase.hasDiscountCoupon();
+    }
+
+    public BigDecimal getOrderAmountWithoutCouponDiscount() {
+        if (!hasDiscountCoupon()) return this.amount;
+        return orderItems.stream().map(OrderItem::getItemPrice).reduce(ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal getOrderAmountWithCupounDiscount(){
+        if (!hasDiscountCoupon()) return null;
+        return this.amount;
+    }
+
+    public Long getPurchaseId() {
+        return purchase.getId();
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 }

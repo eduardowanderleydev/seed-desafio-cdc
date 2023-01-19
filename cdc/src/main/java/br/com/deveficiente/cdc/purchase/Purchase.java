@@ -98,4 +98,61 @@ public class Purchase {
         Assert.isNull(appliedCoupon, "[BUG] Cannot change a coupon");
         this.appliedCoupon = new AppliedCoupon(coupon);
     }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getAddressComplement() {
+        return addressComplement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getCountryName() {
+        return country.getName();
+    }
+
+    public String getStateName() {
+        return state.getName();
+    }
+
+    public Order getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public String getAppliedCouponCode() {
+        if (this.appliedCoupon == null) return null;
+        return appliedCoupon.getCouponCode();
+    }
 }

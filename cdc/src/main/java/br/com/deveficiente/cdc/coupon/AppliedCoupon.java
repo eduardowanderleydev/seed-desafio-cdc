@@ -36,4 +36,8 @@ public class AppliedCoupon {
     public Integer getCouponDiscountPercentual() {
         return couponDiscountPercentual;
     }
+
+    public String getCouponCode() {
+        return this.coupon.getCode();
+    }
 }

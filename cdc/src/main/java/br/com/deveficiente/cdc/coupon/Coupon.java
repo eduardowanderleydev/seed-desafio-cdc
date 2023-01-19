@@ -52,4 +52,8 @@ public class Coupon {
     public LocalDate getExpirationDate() {
         return this.expirationDate;
     }
+
+    public String getCode() {
+        return this.code;
+    }
 }
